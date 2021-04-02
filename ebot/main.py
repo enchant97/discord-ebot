@@ -14,8 +14,6 @@ bot = Bot(
     description=get_settings().DESCRIPTION,
     )
 
-bot.load_extentions(cogs)
-
 
 @bot.event
 async def on_ready():
