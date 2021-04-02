@@ -1,0 +1,14 @@
+.vscode
+
+*.DS_Store
+[Tt]humbs.db
+~$*
+
+*__pycache__
+.pyc
+pylintrc
+.pytest_cache
+venv/
+
+data/
+.env
