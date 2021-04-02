@@ -1,6 +1,6 @@
 import discord
 
-from .bot import Bot
+from .bot import Bot, get_prefix
 from .config import get_settings
 
 cogs = [
@@ -8,7 +8,7 @@ cogs = [
 ]
 
 bot = Bot(
-    command_prefix=get_settings().PREFIX,
+    command_prefix=get_prefix,
     description=get_settings().DESCRIPTION,
     )
 
