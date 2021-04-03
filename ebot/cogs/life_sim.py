@@ -1,5 +1,4 @@
 import logging
-from collections import defaultdict
 from random import randint
 from typing import Union
 
@@ -7,45 +6,59 @@ from discord import Member, User
 from discord.ext import commands
 from discord.ext.commands.context import Context
 
+from ..database import crud
+
 logger = logging.getLogger(__name__)
 
 
 class Economy(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        # TODO use database instead
-        self.__credits_by_id = defaultdict(lambda: self.starting_credits)
 
     @property
     def starting_credits(self) -> int:
         return 100
 
-    async def withdraw_credits(self, member: Union[User, Member], credits_: int) -> Union[int, None]:
-        if self.__credits_by_id[member.id] >= credits_:
-            self.__credits_by_id[member.id] -= credits_
+    async def withdraw_credits(
+            self,
+            member: Union[User, Member], credits_: int) -> Union[int, None]:
+        curr_credits = await crud.user_credits(member.id)
+        if curr_credits >= credits_:
+            curr_credits -= credits_
+            await crud.user_credits(member.id, curr_credits)
             logger.info("withdraw %s credits from %s", credits_, member)
-            return self.__credits_by_id[member.id]
+            return curr_credits
         else:
-            logger.info("withdraw %s credits from %s canceled as\
-                user does not have enough credits", credits_, member)
+            logger.info("withdraw %s credits from %s canceled as \
+user does not have enough credits", credits_, member)
             return None
 
-    async def deposit_credits(self, member: Union[User, Member], credits_: int) -> int:
+    async def deposit_credits(
+            self,
+            member: Union[User, Member], credits_: int) -> int:
+        curr_credits = await crud.user_credits(member.id)
+        curr_credits += credits_
+        await crud.user_credits(member.id, curr_credits)
         logger.info("deposit %s credits to %s", credits_, member)
-        self.__credits_by_id[member.id] += credits_
-        return self.__credits_by_id[member.id]
+        return curr_credits
 
     async def reset_credits(self, member: Union[User, Member]):
-        self.__credits_by_id[member.id] = self.starting_credits
+        await crud.user_credits(member.id, self.starting_credits)
+        logger.info("reset %s credits", member)
 
-    @commands.command(help="Your current balance")
+    @commands.command()
     async def balance(self, ctx: Context):
-        curr_credits = self.__credits_by_id[ctx.author.id]
+        """
+        Your current balance
+        """
+        curr_credits = await crud.user_credits(ctx.author.id)
         logger.info(
             "%s requested their balance, currently %s",
             ctx.author,
             curr_credits)
-        await ctx.send(f"you have {curr_credits} credits")
+        await ctx.send(
+            f"you have {curr_credits} credits",
+            reference=ctx.message)
 
 
 class Gambling(commands.Cog):
@@ -56,25 +69,54 @@ class Gambling(commands.Cog):
     def has_won() -> bool:
         return bool(randint(0, 1))
 
-    @commands.command(help="Put credits in, get credits back or lose it")
+    @commands.command()
     async def gamble(self, ctx: Context, credits_: int):
+        """
+        Put credits in, get credits back or lose it
+        """
         economy: Economy = self.bot.get_cog('Economy')
 
         if await economy.withdraw_credits(ctx.author, credits_) is None:
             logger.info(
                 "%s couldn't gamble as they don't have required credits",
                 ctx.author)
-            await ctx.send("you don't have the credits to gamble")
+            await ctx.send(
+                "you don't have the credits to gamble",
+                reference=ctx.message)
         else:
             if self.has_won():
                 logger.info("%s won the gamble", ctx.author)
                 await economy.deposit_credits(ctx.author, int(credits_ * 1.5))
-                await ctx.send("you won the gamble!")
+                await ctx.send(
+                    "you won the gamble!",
+                    reference=ctx.message)
             else:
                 logger.info("%s lost the gamble", ctx.author)
-                await ctx.send("you lost the gamble")
+                await ctx.send(
+                    "you lost the gamble",
+                    reference=ctx.message)
+
+
+class Employment(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+        self.__base_earn = 10
+
+    @commands.command()
+    async def work(self, ctx: Context):
+        """
+        Go to work and earn credits
+        """
+        economy: Economy = self.bot.get_cog('Economy')
+
+        await economy.deposit_credits(ctx.author, self.__base_earn)
+        logger.info("%s went to work", ctx.author)
+        await ctx.send(
+            f"you went to work and earned {self.__base_earn} credits",
+            reference=ctx.message)
 
 
 def setup(bot):
     bot.add_cog(Economy(bot))
     bot.add_cog(Gambling(bot))
+    bot.add_cog(Employment(bot))
