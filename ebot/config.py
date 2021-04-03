@@ -7,9 +7,9 @@ from pydantic import BaseSettings
 class Settings(BaseSettings):
     DB_URI: str = "sqlite://:memory:"
     LOG_LEVEL: str = "WARNING"
-    PREFIXES: List[str] = ["!ebot"]
-    DESCRIPTION: str = "the bot that runs on the \
-        Enchanted People discord server"
+    PREFIXES: List[str] = ["!"]
+    DESCRIPTION: str = "The bot that runs on the \
+Enchanted People discord server"
     TOKEN: str
 
     class Config:

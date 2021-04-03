@@ -12,7 +12,7 @@ class OwnerCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="isowner")
+    @commands.command(name="isowner", hidden=True)
     @commands.is_owner()
     async def is_owner(self, ctx: Context):
         await ctx.send(f'Hello {ctx.author.mention}. You are the owner!')
