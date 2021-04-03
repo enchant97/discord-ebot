@@ -6,6 +6,7 @@ from .config import get_settings
 from .database import models
 
 cogs = [
+    "ebot.cogs.error_handle",
     "ebot.cogs.owner",
     "ebot.cogs.life_sim",
     "ebot.cogs.game",
