@@ -8,6 +8,7 @@ from .database import models
 cogs = [
     "ebot.cogs.owner",
     "ebot.cogs.life_sim",
+    "ebot.cogs.game",
 ]
 
 bot = Bot(
