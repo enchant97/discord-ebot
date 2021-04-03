@@ -46,7 +46,7 @@ user does not have enough credits", credits_, member)
         await crud.user_credits(member.id, self.starting_credits)
         logger.info("reset %s credits", member)
 
-    @commands.command()
+    @commands.command(aliases=["bal"])
     async def balance(self, ctx: Context):
         """
         Your current balance

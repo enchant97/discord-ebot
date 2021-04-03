@@ -11,7 +11,7 @@ class Games(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command("coinflip")
+    @commands.command("coinflip", aliases=["flip"])
     async def coin_flip(self, ctx: Context):
         """
         flip a coin and return either 'heads' or 'tails'
