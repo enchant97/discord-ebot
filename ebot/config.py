@@ -13,6 +13,7 @@ Enchanted People discord server"
     TOKEN: str
     USER_EXPIRES: str = "2m"
     RUN_AUTO_CLEANUPS: bool = True
+    XP_SCALE: float = 1.5
 
     def get_expire_time(self) -> Tuple[int, str]:
         expire_val = int(self.USER_EXPIRES[:-1])

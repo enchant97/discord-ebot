@@ -1,6 +1,6 @@
 import logging
 from random import randint
-from typing import Union
+from typing import Tuple, Union
 
 from discord import Member, User
 from discord.ext import commands
@@ -61,6 +61,25 @@ user does not have enough credits", credits_, member)
             reference=ctx.message)
 
 
+class Level(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+    async def add_xp(self, member: Union[User, Member], xp: float):
+        await crud.user_xp_add(member.id, xp)
+        logger.info("added %s xp to %s", member, xp)
+
+    @commands.command()
+    async def level(self, ctx: Context):
+        """
+        Your current level stats
+        """
+        curr_xp = await crud.user_xp_get(ctx.author.id)
+        logger.info("%s requested their level, currently %s", ctx.author, curr_xp)
+        await ctx.send(
+            f"level={curr_xp[2]} xp={round(curr_xp[0], 2)}/{curr_xp[1]}",
+            reference=ctx.message)
+
 class Gambling(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -75,6 +94,7 @@ class Gambling(commands.Cog):
         Put credits in, get credits back or lose it
         """
         economy: Economy = self.bot.get_cog('Economy')
+        level: Level = self.bot.get_cog("Level")
 
         if await economy.withdraw_credits(ctx.author, credits_) is None:
             logger.info(
@@ -87,6 +107,7 @@ class Gambling(commands.Cog):
             if self.has_won():
                 logger.info("%s won the gamble", ctx.author)
                 await economy.deposit_credits(ctx.author, int(credits_ * 1.5))
+                await level.add_xp(ctx.author, 0.2)
                 await ctx.send(
                     "you won the gamble!",
                     reference=ctx.message)
@@ -108,15 +129,18 @@ class Employment(commands.Cog):
         Go to work and earn credits
         """
         economy: Economy = self.bot.get_cog('Economy')
+        level: Level = self.bot.get_cog("Level")
 
         await economy.deposit_credits(ctx.author, self.__base_earn)
-        logger.info("%s went to work", ctx.author)
+        await level.add_xp(ctx.author, 0.2)
         await ctx.send(
             f"you went to work and earned {self.__base_earn} credits",
             reference=ctx.message)
+        logger.info("%s went to work", ctx.author)
 
 
 def setup(bot):
     bot.add_cog(Economy(bot))
+    bot.add_cog(Level(bot))
     bot.add_cog(Gambling(bot))
     bot.add_cog(Employment(bot))

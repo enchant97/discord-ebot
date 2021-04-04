@@ -14,6 +14,8 @@ A simple easy to use discord bot available for everyone and free to use.
 - Economy (based on credits)
     - Work
     - Gamble
+- Level
+    - levelup by gaining xp (experience)
 
 ## Install
 1. Get/Generate your Discord Bot token
@@ -23,13 +25,16 @@ variables on launch) with configs for server
 4. Run the bot
 
 ## Configuration Variables
-| Name        |Desc                          |Default                    |
-|:------------|:-----------------------------|:--------------------------|
-| DB_URI      | Where the database should be | "sqlite://:memory:"       |
-| LOG_LEVEL   | What log level to display    | "INFO"                    |
-| PREFIXES    | What will trigger the bot    | ["!"]                     |
-| DESCRIPTION | A description of the bot     | (to long to display here) |
-| TOKEN       | The discord bot token        |                           |
+| Name        |Desc                                                   |Default                    |
+|:------------|:------------------------------------------------------|:--------------------------|
+| DB_URI      | Where the database should be                          | "sqlite://:memory:"       |
+| LOG_LEVEL   | What log level to display                             | "INFO"                    |
+| PREFIXES    | What will trigger the bot                             | ["!"]                     |
+| DESCRIPTION | A description of the bot                              | (to long to display here) |
+| TOKEN       | The discord bot token                                 |                           |
+| USER_EXPIRES | How long a user has to be inactive until they expire | "2m"                      |
+| RUN_AUTO_CLEANUPS | Trigger db cleanups every 24 hours              | True                      |
+| XP_SCALE | Scale that causes levels to require more xp              | 1.5                       |
 
 ## Thanks To
 - EvieePy for [cogs example](https://gist.github.com/EvieePy/d78c061a4798ae81be9825468fe146be) &
