@@ -1,0 +1,16 @@
+version: "3.3"
+
+services:
+  ebot:
+    build: .
+    restart: unless-stopped
+    volumes:
+      - ebot:/data
+    environment:
+      - DB_URI=sqlite:///data/ebot_data.db
+      - LOG_LEVEL=WARNING
+      # enter your token below
+      #- TOKEN=
+
+volumes:
+  ebot:
