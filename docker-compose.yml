@@ -7,3 +7,4 @@ services:
     restart: unless-stopped
     environment:
       - DISCORD_TOKEN=<token here>
+      - ENABLED_COGS=.testing

@@ -10,3 +10,7 @@ class Testing(commands.Cog):
     @commands.command()
     async def ping(self, ctx: Context, *, member: discord.Member = None):
         await ctx.reply("pong!")
+
+
+async def init(bot):
+    await bot.add_cog(Testing(bot))
