@@ -3,7 +3,7 @@ from discord.ext import commands
 from discord.ext.commands.context import Context
 
 
-class TestingCog(commands.Cog):
+class Testing(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 

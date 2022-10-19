@@ -10,9 +10,10 @@ async def create_bot():
 
     bot = commands.Bot(
         command_prefix="?",
-        intents=intents
+        intents=intents,
+        strip_after_prefix=True,
     )
 
-    await bot.add_cog(cogs.TestingCog(bot))
+    await bot.add_cog(cogs.Testing(bot))
 
     return bot

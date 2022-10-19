@@ -1,1 +1,1 @@
-from .testing import TestingCog
+from .testing import Testing
