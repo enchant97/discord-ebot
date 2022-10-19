@@ -19,6 +19,7 @@ async def create_bot():
 
     intents = discord.Intents.all()
     intents.message_content = True
+    intents.members = True
 
     bot = commands.Bot(
         command_prefix=os.environ.get("COMMAND_PREFIX", "!e"),
