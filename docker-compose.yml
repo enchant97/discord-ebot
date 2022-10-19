@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  ebot:
+    container_name: ebot
+    build: .
+    restart: unless-stopped
+    environment:
+      - DISCORD_TOKEN=<token here>
