@@ -6,6 +6,8 @@ import sys
 import discord
 from discord.ext import commands
 
+from .db.utils import init_connection
+
 logger = logging.getLogger("ebot")
 
 
@@ -16,6 +18,8 @@ async def create_bot():
         sys.exit("at least one cog must be enabled, use 'ENABLED_COGS' to set them")
 
     enabled_cogs = enabled_cogs.split(",")
+
+    db_conn = init_connection()
 
     intents = discord.Intents.all()
     intents.message_content = True
