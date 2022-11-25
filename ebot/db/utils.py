@@ -18,7 +18,7 @@ def init_connection():
     connection = r.connect(
         host=environ.get("DB_HOST", "127.0.0.1"),
         port=int(environ.get("DB_PORT", "28015")),
-        db=environ.get("DB_DB", "ebot"),
+        db=environ.get("DB_DB", "test"),
         user=environ.get("DB_USER", "admin"),
         password=environ.get("DB_PASS", ""),
     )

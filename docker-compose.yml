@@ -7,4 +7,17 @@ services:
     restart: unless-stopped
     environment:
       - DISCORD_TOKEN=<token here>
-      - ENABLED_COGS=.testing
+      - ENABLED_COGS=.welcome,.games
+      - "DB_HOST=ebot_db"
+
+  db:
+    container_name: ebot_db
+    image: rethinkdb
+    restart: unless-stopped
+    volumes:
+      - db_data:/data
+    ports:
+      - 8080:8080
+
+volumes:
+  db_data:

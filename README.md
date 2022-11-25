@@ -14,7 +14,7 @@ Very WIP...
 |                |       |             |
 | DB_HOST        |       | "127.0.0.1" |
 | DB_PORT        |       | "28015"     |
-| DB_DB          |       | "ebot"      |
+| DB_DB          |       | "test"      |
 | DB_USER        |       | "admin"     |
 | DB_PASS        |       | ""          |
 
