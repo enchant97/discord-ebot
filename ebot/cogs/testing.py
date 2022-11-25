@@ -6,9 +6,10 @@ from discord.ext.commands.context import Context
 class Testing(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        super().__init__()
 
-    @commands.command()
-    async def ping(self, ctx: Context, *, member: discord.Member = None):
+    @commands.hybrid_command(description="bot replies with 'pong'")
+    async def ping(self, ctx: commands.Context):
         await ctx.reply("pong!")
 
 

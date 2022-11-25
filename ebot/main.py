@@ -37,4 +37,9 @@ async def create_bot():
             # external cog (from a plugin)
             await importlib.import_module(cog_name).init(bot)
 
+    @bot.event
+    async def on_ready():
+        # sync slash-commands
+        await bot.tree.sync()
+
     return bot
