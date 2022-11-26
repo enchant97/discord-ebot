@@ -1,10 +1,23 @@
 # Discord E-Bot
-The official discord bot for the Enchanted People server.
+E-Bot aims to be a general purpose discord bot. It is also the official bot for the Enchanted People server.
 
 > Early in development, not suited for production
 
+## Features
+- Customisable
+- Works over multiple servers (guilds)
+- Data stored using [RethinkDB](https://rethinkdb.com/) a NoSQL database
+- Togglable features
+    - Welcome messages
+    - Idea-Box
+    - Games
+        - Coin-flip
+        - Random number generator
+    - Admin (configure certain features)
+
 ## Config
 Very WIP...
+
 | Name           | Notes | Default     |
 | :------------- | :---- | :---------- |
 | DISCORD_TOKEN  |       |             |
