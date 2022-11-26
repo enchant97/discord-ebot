@@ -22,7 +22,7 @@ async def create_bot():
     db_conn = init_connection()
 
     intents = discord.Intents.all()
-    intents.message_content = True
+    intents.message_content = False
     intents.members = True
 
     bot = commands.Bot(
