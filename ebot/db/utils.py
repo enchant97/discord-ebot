@@ -12,6 +12,13 @@ def get_conn():
     return shared_conn
 
 
+def _create_table(conn, name: str, **kw):
+    try:
+        r.table_create(name, **kw).run(conn)
+    except RqlRuntimeError:
+        pass
+
+
 def init_connection():
     global shared_conn
     # TODO use async mode, when it's fixed for python 3.10
@@ -23,10 +30,8 @@ def init_connection():
         password=environ.get("DB_PASS", ""),
     )
 
-    try:
-        r.table_create("config").run(connection)
-    except RqlRuntimeError:
-        pass
+    _create_table(connection, "config", primary_key="guild_id")
+    _create_table(connection, "ideas")
 
     shared_conn = connection
 
