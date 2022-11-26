@@ -19,7 +19,7 @@ class Welcome(commands.Cog):
     async def on_member_join(self, member):
         channel = member.guild.system_channel
         if channel is not None:
-            message = get_config_value("welcome-msg")
+            message = get_config_value(ctx.guild.id, "welcome-msg")
             if message:
                 message = Template(message)
             else:

@@ -18,9 +18,9 @@ class Testing(commands.Cog):
 
     @commands.hybrid_command(description="output welcome message")
     async def welcome(self, ctx: commands.Context):
-        message = get_config_value("welcome-msg")
+        message = get_config_value(ctx.guild.id, "welcome-msg")
         if message:
-            message = Template(message["value"]).safe_substitute(member=ctx.author.mention)
+            message = Template(message).safe_substitute(member=ctx.author.mention)
         else:
             message = "no welcome message has been set..."
 
