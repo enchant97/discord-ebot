@@ -19,7 +19,7 @@ class Games(commands.GroupCog):
         description="generate a random number from given range")
     async def random_number(self, ctx: commands.Context, start: int, end: int):
         result = secrets.choice(range(start, end+1))
-        await ctx.reply(f"Picked: {result}")
+        await ctx.reply(f"Picked ({start}-{end}): {result}")
 
 async def init(bot):
     await bot.add_cog(Games(bot))

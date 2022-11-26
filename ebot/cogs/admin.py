@@ -20,9 +20,9 @@ class Admin(commands.GroupCog):
         message = new_message or get_config_value(ctx.guild.id, "welcome-msg")
         if message:
             message = Template(message).safe_substitute(member=ctx.author.mention)
-            await ctx.reply(message)
+            await ctx.reply(message, ephemeral=True)
         else:
-            await ctx.reply("no welcome message has been set")
+            await ctx.reply("no welcome message has been set", ephemeral=True)
 
 
 async def init(bot):

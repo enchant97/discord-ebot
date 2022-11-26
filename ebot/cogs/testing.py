@@ -9,7 +9,7 @@ class Testing(commands.GroupCog):
 
     @commands.hybrid_command(description="bot replies with 'pong'")
     async def ping(self, ctx: commands.Context):
-        await ctx.reply("pong!")
+        await ctx.reply("pong!", ephemeral=True)
 
 
 async def init(bot):

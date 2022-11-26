@@ -30,7 +30,7 @@ class Welcome(commands.Cog):
     async def credits(self, ctx: commands.Context):
         await ctx.reply(
             "Powered By [ebot](https://github.com/enchant97/discord-ebot), " +
-            "the official Enchanted People discord bot")
+            "the official Enchanted People discord bot", ephemeral=True)
 
 
 async def init(bot):
