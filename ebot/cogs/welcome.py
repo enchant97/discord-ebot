@@ -27,6 +27,12 @@ class Welcome(commands.Cog):
 
             await channel.send(message.safe_substitute(member=member.mention))
 
+    @commands.hybrid_command(description="show the credits for the bot")
+    async def credits(self, ctx: commands.Context):
+        await ctx.reply(
+            "Powered By [ebot](https://github.com/enchant97/discord-ebot), " +
+            "the official Enchanted People discord bot")
+
 
 async def init(bot):
     await bot.add_cog(Welcome(bot))
