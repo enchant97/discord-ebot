@@ -20,7 +20,6 @@ class Admin(commands.GroupCog):
         if new_message:
             set_config_value(ctx.guild.id, "welcome-msg", new_message)
         message = new_message or get_config_value(ctx.guild.id, "welcome-msg")
-        print(message)
         if message:
             message = Template(message).safe_substitute(member=ctx.author.mention)
             await ctx.reply(message)
