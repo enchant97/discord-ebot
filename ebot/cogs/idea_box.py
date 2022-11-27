@@ -22,6 +22,8 @@ class IdeaBox(commands.GroupCog, group_name="idea-box"):
         output = "Ideas:"
         for idea in latest_ideas:
             output += f"\n- {idea['idea']}"
+            if (author := self.bot.get_user(idea["author_id"])) is not None:
+                output += f" by {author.mention}"
         await ctx.reply(output, ephemeral=True)
 
 
