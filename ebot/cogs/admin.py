@@ -1,10 +1,21 @@
 from string import Template
 
-from discord import app_commands
+import discord
+from discord import app_commands, Interaction
 from discord.ext import commands
 from discord.ext.commands.context import Context
 
 from ..db.crud import get_config_value, set_config_value
+
+
+class ManageSelectableRolesSelect(discord.ui.RoleSelect):
+    async def callback(self, interaction: Interaction):
+        set_config_value(
+            interaction.guild.id,
+            "member-selectable-roles",
+            [str(role.id) for role in self.values],
+        )
+        await interaction.response.edit_message(content="Set new roles", view=None)
 
 
 @app_commands.guild_only()
@@ -23,6 +34,16 @@ class Admin(commands.GroupCog):
             await ctx.reply(message, ephemeral=True)
         else:
             await ctx.reply("no welcome message has been set", ephemeral=True)
+
+    @app_commands.command(name="selectable-roles", description="set user selectable roles (reaction roles)")
+    async def selectable_roles(self, interaction: Interaction):
+        view = discord.ui.View()
+        view.add_item(ManageSelectableRolesSelect(max_values=25))
+        await interaction.response.send_message(
+            "Select roles to enable",
+            view=view,
+            ephemeral=True
+        )
 
 
 async def init(bot):
