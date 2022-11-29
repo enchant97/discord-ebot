@@ -9,11 +9,14 @@ E-Bot aims to be a general purpose discord bot. It is also the official bot for 
 - Data stored using [RethinkDB](https://rethinkdb.com/) a NoSQL database
 - Togglable features
     - Welcome messages
+    - Member Profile
+      - Roles
     - Idea-Box
     - Games
         - Coin-flip
         - Random number generator
     - Admin (configure certain features)
+
 
 ## Config
 Very WIP...
@@ -32,7 +35,7 @@ Very WIP...
 | DB_PASS        |       | ""          |
 
 ### Enabling Cogs
-To allow for customisation, cogs are used to add features into the bot.
+To allow for customisation, cogs are used to add and remove features. By default all features apart from "testing" are enabled.
 
 e.g.
 

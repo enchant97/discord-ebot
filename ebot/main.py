@@ -1,3 +1,4 @@
+from pathlib import Path
 import importlib
 import logging
 import os
@@ -11,13 +12,20 @@ from .db.utils import init_connection
 logger = logging.getLogger("ebot")
 
 
+def _yield_all_cogs():
+    for path in Path(__file__).parent.joinpath("cogs").iterdir():
+        if path.is_file() and path.name not in ("__init__.py", "testing.py"):
+            yield f".{path.stem}"
+
+
 async def create_bot():
     enabled_cogs = os.environ.get("ENABLED_COGS")
 
-    if not enabled_cogs:
-        sys.exit("at least one cog must be enabled, use 'ENABLED_COGS' to set them")
-
-    enabled_cogs = enabled_cogs.split(",")
+    if enabled_cogs:
+        enabled_cogs = enabled_cogs.split(",")
+    else:
+        logger.info("using default cogs, as none have been set in config")
+        enabled_cogs = _yield_all_cogs()
 
     db_conn = init_connection()
 
