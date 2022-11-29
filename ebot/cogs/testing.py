@@ -1,15 +1,15 @@
-from discord.ext import commands
-from discord.ext.commands.context import Context
+from discord.ext.commands import GroupCog
+from discord import app_commands, Interaction
 
 
-class Testing(commands.GroupCog):
+class Testing(GroupCog):
     def __init__(self, bot):
         self.bot = bot
         super().__init__()
 
-    @commands.hybrid_command(description="bot replies with 'pong'")
-    async def ping(self, ctx: commands.Context):
-        await ctx.reply("pong!", ephemeral=True)
+    @app_commands.command(description="bot replies with 'pong'")
+    async def ping(self, interaction: Interaction):
+        await interaction.response.send_message("pong!", ephemeral=True)
 
 
 async def init(bot):

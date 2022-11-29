@@ -2,8 +2,7 @@ from string import Template
 
 import discord
 from discord import app_commands, Interaction
-from discord.ext import commands
-from discord.ext.commands.context import Context
+from discord.ext.commands import GroupCog
 
 from ..db.crud import get_config_value, set_config_value
 
@@ -19,21 +18,24 @@ class ManageSelectableRolesSelect(discord.ui.RoleSelect):
 
 
 @app_commands.guild_only()
-class Admin(commands.GroupCog):
+class Admin(GroupCog):
     def __init__(self, bot):
         self.bot = bot
         super().__init__()
 
-    @commands.hybrid_command(name="welcome-msg", description="set or get the welcome message")
-    async def welcome_msg(self, ctx: commands.Context, new_message: str | None = None):
+    @app_commands.command(name="welcome-msg", description="set or get the welcome message")
+    async def welcome_msg(self, interaction: Interaction, new_message: str | None = None):
         if new_message:
-            set_config_value(ctx.guild.id, "welcome-msg", new_message)
-        message = new_message or get_config_value(ctx.guild.id, "welcome-msg")
+            set_config_value(interaction.guild.id, "welcome-msg", new_message)
+        message = new_message or get_config_value(interaction.guild.id, "welcome-msg")
         if message:
-            message = Template(message).safe_substitute(member=ctx.author.mention)
-            await ctx.reply(message, ephemeral=True)
+            message = Template(message).safe_substitute(member=interaction.user.mention)
+            await interaction.response.send_message(message, ephemeral=True)
         else:
-            await ctx.reply("no welcome message has been set", ephemeral=True)
+            await interaction.response.send_message(
+                "no welcome message has been set",
+                ephemeral=True,
+            )
 
     @app_commands.command(name="selectable-roles", description="set user selectable roles (reaction roles)")
     async def selectable_roles(self, interaction: Interaction):

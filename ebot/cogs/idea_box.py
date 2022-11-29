@@ -1,30 +1,29 @@
-from discord import app_commands
-from discord.ext import commands
-from discord.ext.commands.context import Context
+from discord import app_commands, Interaction
+from discord.ext.commands import GroupCog
 
 from ..db.crud import insert_idea, get_ideas_latest
 
 
 @app_commands.guild_only()
-class IdeaBox(commands.GroupCog, group_name="idea-box"):
+class IdeaBox(GroupCog, group_name="idea-box"):
     def __init__(self, bot):
         self.bot = bot
         super().__init__()
 
-    @commands.hybrid_command(description="add a suggestion")
-    async def add(self, ctx: commands.Context, idea: str):
-        insert_idea(ctx.guild.id, ctx.author.id, idea)
-        await ctx.reply("That's a great idea!", ephemeral=True)
+    @app_commands.command(description="add a suggestion")
+    async def add(self, interaction: Interaction, idea: str):
+        insert_idea(interaction.guild.id, interaction.user.id, idea)
+        await interaction.response.send_message("That's a great idea!", ephemeral=True)
 
-    @commands.hybrid_command(description="get the latest suggestions")
-    async def latest(self, ctx: commands.Context, limit: int | None = 5):
-        latest_ideas = get_ideas_latest(ctx.guild.id, min(limit, 20))
+    @app_commands.command(description="get the latest suggestions")
+    async def latest(self, interaction: Interaction, limit: int | None = 5):
+        latest_ideas = get_ideas_latest(interaction.guild.id, min(limit, 20))
         output = "Ideas:"
         for idea in latest_ideas:
             output += f"\n- {idea['idea']}"
-            if (author := self.bot.get_user(idea["author_id"])) is not None:
+            if (author := self.bot.get_user(int(idea["author_id"]))) is not None:
                 output += f" by {author.mention}"
-        await ctx.reply(output, ephemeral=True)
+        await interaction.response.send_message(output, ephemeral=True)
 
 
 async def init(bot):

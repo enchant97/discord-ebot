@@ -1,25 +1,25 @@
 import secrets
 
-from discord.ext import commands
-from discord.ext.commands.context import Context
+from discord import app_commands, Interaction
+from discord.ext.commands import GroupCog
 
 
-class Games(commands.GroupCog):
+class Games(GroupCog):
     def __init__(self, bot):
         self.bot = bot
         super().__init__()
 
-    @commands.hybrid_command(name="coin-flip", description="flip a coin")
-    async def coin_flip(self, ctx: commands.Context):
+    @app_commands.command(name="coin-flip", description="flip a coin")
+    async def coin_flip(self, interaction: Interaction):
         result = secrets.choice((":coin: Heads!", ":coin: Tail!"))
-        await ctx.reply(result)
+        await interaction.response.send_message(result)
 
-    @commands.hybrid_command(
+    @app_commands.command(
         name="random-number",
         description="generate a random number from given range")
-    async def random_number(self, ctx: commands.Context, start: int, end: int):
+    async def random_number(self, interaction: Interaction, start: int, end: int):
         result = secrets.choice(range(start, end+1))
-        await ctx.reply(f"Picked ({start}-{end}): {result}")
+        await interaction.response.send_message(f"Picked ({start}-{end}): {result}")
 
 async def init(bot):
     await bot.add_cog(Games(bot))
